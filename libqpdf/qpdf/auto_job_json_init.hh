@@ -359,6 +359,9 @@ popHandler(); // key: creationdate
 pushKey("description");
 addParameter([this](std::string const& p) { c_att->description(p); });
 popHandler(); // key: description
+pushKey("relationship");
+addParameter([this](std::string const& p) { c_att->relationship(p); });
+popHandler(); // key: description
 pushKey("filename");
 addParameter([this](std::string const& p) { c_att->filename(p); });
 popHandler(); // key: filename

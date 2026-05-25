@@ -2039,6 +2039,20 @@ QPDFJob::addAttachments(QPDF& pdf)
         if (!to_add.description.empty()) {
             fs.setDescription(to_add.description);
         }
+
+        if (!to_add.relationship.empty()) {
+            auto catalog = pdf.getRoot();
+
+            const std::string af_key = "/AF";
+
+            if (!catalog.hasKey(af_key)) {
+                catalog.replaceKey(af_key, QPDFObjectHandle::newArray());
+            }
+
+            catalog.getKey(af_key).appendItem(fs.getObjectHandle());
+
+            fs.setRelationship(to_add.relationship);
+        }
         auto efs = QPDFEFStreamObjectHelper(fs.getEmbeddedFileStream());
         efs.setCreationDate(to_add.creationdate).setModDate(to_add.moddate);
         if (!to_add.mimetype.empty()) {
