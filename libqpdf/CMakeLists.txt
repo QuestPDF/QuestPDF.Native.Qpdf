@@ -39,7 +39,7 @@ set(libqpdf_SOURCES
   Pl_Buffer.cc
   Pl_Concatenate.cc
   Pl_Count.cc
-  Pl_DCT.cc
+  Pl_DCT_stub.cc
   Pl_Discard.cc
   Pl_Flate.cc
   Pl_Function.cc
@@ -124,9 +124,8 @@ endif()
 if(EXTERNAL_LIBS)
   set(EXTLIBDIR ${qpdf_SOURCE_DIR}/external-libs)
   list(APPEND dep_include_directories ${EXTLIBDIR}/include)
-  set(JPEG_INCLUDE ${EXTLIBDIR}/include)
   list(APPEND dep_link_libraries
-    z jpeg ssl crypto msvcrt ws2_32 shell32 advapi32 gdi32 user32 crypt32)
+    z ssl crypto msvcrt ws2_32 shell32 advapi32 gdi32 user32 crypt32)
   if (MSVC)
     list(APPEND dep_link_directories ${EXTLIBDIR}/lib-msvc${WORDSIZE})
   else()
@@ -154,26 +153,7 @@ if(NOT EXTERNAL_LIBS)
   endif()
 endif()
 
-if(NOT EXTERNAL_LIBS)
-  pkg_check_modules(pc_libjpeg libjpeg)
-  if(pc_libjpeg_FOUND)
-    list(APPEND dep_include_directories ${pc_libjpeg_INCLUDEDIR})
-    list(APPEND dep_link_directories ${pc_libjpeg_LIBDIR})
-    list(APPEND dep_link_libraries ${pc_libjpeg_LIBRARIES})
-    set(JPEG_INCLUDE ${pc_libjpeg_INCLUDEDIR})
-  else()
-    find_path(LIBJPEG_H_PATH jpeglib.h)
-    find_library(LIBJPEG_LIB_PATH jpeg)
-    if(LIBJPEG_H_PATH AND LIBJPEG_LIB_PATH)
-      list(APPEND dep_include_directories ${LIBJPEG_H_PATH})
-      list(APPEND dep_link_libraries ${LIBJPEG_LIB_PATH})
-      set(JPEG_INCLUDE ${LIBJPEG_H_PATH})
-    else()
-      message(SEND_ERROR "libjpeg not found")
-      set(ANYTHING_MISSING 1)
-    endif()
-  endif()
-endif()
+# JPEG dependency removed
 
 if(ZOPFLI)
   find_path(ZOPFLI_H_PATH NAMES zopfli.h PATH_SUFFIXES zopfli)
@@ -187,8 +167,7 @@ if(ZOPFLI)
   endif()
 endif()
 
-# Update JPEG_INCLUDE in PARENT_SCOPE after we have finished setting it.
-set(JPEG_INCLUDE ${JPEG_INCLUDE} PARENT_SCOPE)
+# JPEG support removed
 
 # Crypto provider selection. Prefer external crypto providers. If
 # implicit selection is allowed, use native only when no other options
@@ -412,7 +391,6 @@ target_include_directories(${OBJECT_LIB}
   SYSTEM PRIVATE ${dep_include_directories})
 target_include_directories(${OBJECT_LIB}
   PUBLIC
-  ${JPEG_INCLUDE}
   ${qpdf_INCLUDE}
   ${qpdf_SOURCE_DIR}/libqpdf
   ${CMAKE_CURRENT_BINARY_DIR})
