@@ -67,6 +67,13 @@ QPDFJob::Config::inputFile(std::string const& filename)
 }
 
 QPDFJob::Config*
+QPDFJob::Config::extendMetadata(std::string const& metadata)
+{
+    o.m->metadataExtension = metadata;
+    return this;
+}
+
+QPDFJob::Config*
 QPDFJob::Config::emptyInput()
 {
     if (o.m->infile_name().empty()) {

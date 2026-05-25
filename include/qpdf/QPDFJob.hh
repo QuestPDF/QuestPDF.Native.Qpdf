@@ -337,6 +337,8 @@ class QPDFJob
         QPDF_DLL
         Config* inputFile(std::string const& filename);
         QPDF_DLL
+        Config* extendMetadata(std::string const& metadata);
+        QPDF_DLL
         Config* emptyInput();
         QPDF_DLL
         Config* outputFile(std::string const& filename);

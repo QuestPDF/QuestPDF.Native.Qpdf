@@ -23,6 +23,9 @@ static char const* modify128_choices[] = {"all", "annotate", "form", "assembly",
 pushKey("inputFile");
 setupInputFile();
 popHandler(); // key: inputFile
+pushKey("extendMetadata");
+addParameter([this](std::string const& m) { c_main->extendMetadata(m); });
+popHandler(); // key: extendMetadata
 pushKey("password");
 setupPassword();
 popHandler(); // key: password

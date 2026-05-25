@@ -1,5 +1,6 @@
 static constexpr char const* JOB_SCHEMA_DATA = R"({
   "inputFile": "input filename",
+  "extendMetadata": "extend metadata",
   "password": "password for encrypted file",
   "passwordFile": "read password from a file",
   "empty": "use empty file as input",

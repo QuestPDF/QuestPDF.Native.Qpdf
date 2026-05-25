@@ -1,6 +1,8 @@
 #include <qpdf/QPDFPageDocumentHelper.hh>
 #include <qpdf/QPDF_private.hh>
 
+#include <regex>
+
 #include <qpdf/AcroForm.hh>
 #include <qpdf/QPDFExc.hh>
 #include <qpdf/QPDFObjectHandle_private.hh>
@@ -630,6 +632,26 @@ void
 QPDFPageDocumentHelper::flattenAnnotations(int required_flags, int forbidden_flags)
 {
     qpdf.doc().pages().flatten_annotations(required_flags, forbidden_flags);
+}
+
+void
+QPDFPageDocumentHelper::extendMetadata(std::string const& metadataContent) const
+{
+    QPDFObjectHandle metadata = qpdf.getRoot().getKey("/Metadata");
+    if (!metadata.isStream()) {
+        qpdf.getRoot().warn(
+            "document has no /Metadata stream; skipping metadata extension");
+        return;
+    }
+
+    std::shared_ptr<Buffer> buffer = metadata.getStreamData();
+    const auto xmp = std::string(reinterpret_cast<const char*>(buffer->getBuffer()), buffer->getSize());
+
+    const std::string endTag = "</rdf:RDF>";
+    const std::regex re(endTag);
+    const std::string result = std::regex_replace(xmp, re, metadataContent + endTag);
+
+    metadata.replaceStreamData(result, QPDFObjectHandle::newNull(), QPDFObjectHandle::newNull());
 }
 
 void

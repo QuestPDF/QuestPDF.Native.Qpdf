@@ -119,6 +119,9 @@ class QPDFPageDocumentHelper: public QPDFDocumentHelper
     QPDF_DLL
     void flattenAnnotations(int required_flags = 0, int forbidden_flags = an_invisible | an_hidden);
 
+    QPDF_DLL
+    void extendMetadata(std::string const& metadata) const;
+
   private:
     class Members;
 

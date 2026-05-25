@@ -2181,6 +2181,9 @@ QPDFJob::handleTransformations(QPDF& pdf)
     if (m->flatten_annotations) {
         dh.flattenAnnotations(m->flatten_annotations_required, m->flatten_annotations_forbidden);
     }
+    if (!m->metadataExtension.empty()) {
+        dh.extendMetadata(m->metadataExtension);
+    }
     if (m->coalesce_contents) {
         for (auto& page: dh.getAllPages()) {
             page.coalesceContentStreams();

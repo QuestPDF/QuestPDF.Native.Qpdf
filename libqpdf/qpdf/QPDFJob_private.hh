@@ -263,6 +263,7 @@ class QPDFJob::Members
     bool check_requires_password{false};
     bool empty_input{false};
     std::string outfilename;
+    std::string metadataExtension;
     bool json_input{false};
     bool json_output{false};
     std::string update_from_json;
